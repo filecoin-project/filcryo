@@ -4,7 +4,7 @@
 # Defaults to the latest snapshot available.
 
 SNAPSHOT_URL="${1:-'https://snapshots.mainnet.filops.net/minimal/latest'}"
-REPO_PATH="${REPO_PATH:-".lily"}"
+REPO_PATH="${REPO_PATH:-"/lily/.lily"}"
 
 echo "Initializing Lily repository with ${SNAPSHOT_URL}"
 
