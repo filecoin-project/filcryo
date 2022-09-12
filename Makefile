@@ -1,3 +1,16 @@
+.DEFAULT_GOAL := run
+
+build:
+	docker build -t davidgasquez/filet:v0.1.0 .
+
+run: build
+	docker run -it davidgasquez/filet:v0.1.0
+
+push: build
+	docker push davidgasquez/filet:v0.1.0
+
+# Running things in separate containers
+
 init: data-volume
 	docker run -it \
         -v $(PWD)/lily:/lily \
@@ -10,7 +23,7 @@ data-volume:
 
 daemon:
 	docker run -it \
-        -v $(PWD)/lily:/lily \
+        -v $(PWD):/lily \
         -v $(PWD)/data:/tmp/data \
         --mount source=lily-data,target=/tmp/lily \
         --network host \
