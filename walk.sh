@@ -14,7 +14,7 @@ GOLOG_LOG_FMT=json \
 GOLOG_FILE=/lily/log.json
 GOLOG_OUTPUT=file
 
-lily init --config /lily/config.toml --repo ${REPO_PATH} --import-snapshot ${SNAPSHOT_URL}
+lily init --config /lily/config.toml --repo ${REPO_PATH} --import-snapshot 'https://snapshots.mainnet.filops.net/minimal/latest'
 
 nohup lily daemon --repo=${REPO_PATH} --config /lily/config.toml --blockstore-cache-size 5000000 --statestore-cache-size 3000000 &> out.log &
 

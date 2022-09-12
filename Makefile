@@ -1,13 +1,15 @@
 .DEFAULT_GOAL := run
 
+IMAGE=davidgasquez/filet:v0.1.1
+
 build:
-	docker build -t davidgasquez/filet:v0.1.0 .
+	docker build -t $(IMAGE) .
 
 run: build
-	docker run -it davidgasquez/filet:v0.1.0
+	docker run -it $(IMAGE)
 
 push: build
-	docker push davidgasquez/filet:v0.1.0
+	docker push $(IMAGE)
 
 # Running things in separate containers
 
