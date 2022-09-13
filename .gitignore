@@ -130,3 +130,7 @@ dmypy.json
 
 # Lily Repository
 .lily
+
+# CAR files
+*.car
+*.car.aria2

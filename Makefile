@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := run
 
-VERSION=v0.1.1
+VERSION=v0.1.3
 IMAGE=davidgasquez/filet
 
 build:
@@ -18,3 +18,4 @@ push: build
 
 clean:
 	sudo rm -rf .lily
+	rm -rf *.car *.aria2
