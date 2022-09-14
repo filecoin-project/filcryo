@@ -2,18 +2,24 @@ import subprocess
 import typer
 import requests
 
-LATEST_SNAPSHOT_URL = requests.get(
-    "https://snapshots.mainnet.filops.net/minimal/latest",
-    allow_redirects=False,
-    timeout=10,
-).headers["Location"]
-
 app = typer.Typer()
+
+
+def get_latest_snapshot():
+    """Get the latest snapshot URL"""
+    return requests.get(
+        "https://snapshots.mainnet.filops.net/minimal/latest",
+        allow_redirects=False,
+        timeout=10,
+    ).headers["Location"]
 
 
 @app.command()
 def download(
-    url: str = typer.Argument(LATEST_SNAPSHOT_URL, help="The URL to download"),
+    url: str = typer.Argument(
+        "https://snapshots.mainnet.filops.net/minimal/latest",
+        help="The URL to download",
+    ),
     folder: str = typer.Option(
         ".",
         "-f",

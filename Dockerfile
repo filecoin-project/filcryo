@@ -42,8 +42,10 @@ COPY --from=builder /usr/lib/x86_64-linux-gnu/libhwloc.so* /lib/
 COPY --from=builder /usr/lib/x86_64-linux-gnu/libnuma.so* /lib/
 COPY --from=builder /usr/lib/x86_64-linux-gnu/libltdl.so* /lib/
 
-RUN pip3 --disable-pip-version-check --no-cache-dir install "typer[all]" requests poetry \
+RUN pip3 --disable-pip-version-check --no-cache-dir install "typer[all]" requests \
     && rm -rf /tmp/pip-tmp
 
 # Add required files
 COPY config.toml walk.sh /lily/
+
+ENTRYPOINT [ "/bin/bash" ]
