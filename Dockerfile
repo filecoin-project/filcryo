@@ -49,3 +49,5 @@ RUN pip3 --disable-pip-version-check --no-cache-dir install "typer[all]" request
 COPY config.toml walk.sh /lily/
 
 ENTRYPOINT [ "/bin/bash" ]
+
+CMD [ "/lily/walk.sh" ]
