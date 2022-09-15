@@ -5,7 +5,7 @@
                 "runnables": [
                     {
                         "container": {
-                            "imageUri": "davidgasquez/filet:v0.2.0",
+                            "imageUri": "davidgasquez/filet:v0.2.2",
                             "volumes": [
                                 "/mnt/share:/data"
                             ],

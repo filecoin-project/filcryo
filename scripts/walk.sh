@@ -5,8 +5,6 @@
 
 set -eo pipefail
 
-curl -w "%{url_effective}\n" -I -L -s -S https://snapshots.mainnet.filops.net/minimal/latest -o /dev/null
-
 SNAPSHOT_URL="${1:-"https://snapshots.mainnet.filops.net/minimal/latest"}"
 REPO_PATH="${REPO_PATH:-"/var/lib/lily"}"
 
@@ -14,17 +12,17 @@ echo "Initializing Lily repository with ${SNAPSHOT_URL}"
 
 export GOLOG_LOG_FMT=json
 
-aria2c -x16 -s16 "${SNAPSHOT_URL}" -o /tmp/snapshot.car
+aria2c -x16 -s16 "${SNAPSHOT_URL}" -d /tmp
 
-lily init --config /lily/config.toml --repo ${REPO_PATH} --import-snapshot /tmp/snapshot.car
+lily init --config /lily/config.toml --repo ${REPO_PATH} --import-snapshot /tmp/*.car
 
 nohup lily daemon --repo=${REPO_PATH} --config /lily/config.toml &> out.log &
 
 lily wait-api
 
-STATE=$(lily chain state-inspect -l 4000)
-FROM_EPOCH=$(echo $STATE | jq -r ".summary.messages.oldest")
-TO_EPOCH=$(($FROM_EPOCH + 2000))
+car_file_name=$(ls -1 /tmp/*.car | xargs basename)
+TO_EPOCH=${car_file_name%%_*}
+FROM_EPOCH=$(($TO_EPOCH - 2000))
 
 echo "Walking from epoch ${FROM_EPOCH} to ${TO_EPOCH}"
 

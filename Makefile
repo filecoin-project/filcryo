@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := run
 
-VERSION=v0.2.1
+VERSION=v0.2.2
 IMAGE=davidgasquez/filet
 
 build:
@@ -21,4 +21,4 @@ clean:
 	rm -rf *.car *.aria2
 
 send:
-	gcloud beta batch jobs submit lily-job-ram-gcs-full-$$RANDOM --config batch_job.json --location europe-north1
+	gcloud beta batch jobs submit lily-job-ram-gcs-full-$$RANDOM --config gce_batch_job.json --location europe-north1
