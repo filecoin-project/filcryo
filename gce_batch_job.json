@@ -1,0 +1,54 @@
+{
+    "taskGroups": [
+        {
+            "taskSpec": {
+                "runnables": [
+                    {
+                        "container": {
+                            "imageUri": "davidgasquez/filet:v0.2.0",
+                            "volumes": [
+                                "/mnt/share:/data"
+                            ],
+                            "options": "--tmpfs /ram -e REPO_PATH=/ram/.lily"
+                        }
+                    },
+                    {
+                        "script": {
+                            "text": "ls /mnt/share"
+                        }
+                    }
+                ],
+                "computeResource": {
+                    "cpuMilli": 55000,
+                    "memoryMib": 310000,
+                    "boot_disk_mib": 307200
+                },
+                "volumes": [
+                    {
+                        "gcs": {
+                            "remotePath": "pl-data-temp"
+                        },
+                        "mountPath": "/mnt/share"
+                    }
+                ],
+                "maxRetryCount": 1,
+                "maxRunDuration": "86400s"
+            },
+            "taskCount": 1,
+            "parallelism": 1
+        }
+    ],
+    "allocationPolicy": {
+        "instances": [
+            {
+                "policy": {
+                    "machineType": "n2-standard-64",
+                    "provisioningModel": "SPOT"
+                }
+            }
+        ]
+    },
+    "logsPolicy": {
+        "destination": "CLOUD_LOGGING"
+    }
+}
