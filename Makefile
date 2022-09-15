@@ -1,16 +1,16 @@
 .DEFAULT_GOAL := run
 
-VERSION=v0.2.0
+VERSION=v0.2.1
 IMAGE=davidgasquez/filet
 
 build:
 	docker build -t $(IMAGE):$(VERSION) -t $(IMAGE):latest .
 
 run: build
-	docker run -it -v ${PWD}/.lily:/var/lib/lily -v${PWD}:/data ($(IMAGE)
+	docker run -it -v ${PWD}/.lily:/var/lib/lily -v${PWD}:/data $(IMAGE):$(VERSION)
 
 shell: build
-	docker run -it --entrypoint /bin/bash -v ${PWD}/.lily:/var/lib/lily $(IMAGE)
+	docker run -it --entrypoint /bin/bash -v ${PWD}/.lily:/var/lib/lily -v${PWD}:/data $(IMAGE):$(VERSION)
 
 push: build
 	docker push $(IMAGE):$(VERSION)

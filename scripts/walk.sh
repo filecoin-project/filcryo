@@ -24,7 +24,7 @@ lily wait-api
 
 STATE=$(lily chain state-inspect -l 4000)
 FROM_EPOCH=$(echo $STATE | jq -r ".summary.messages.oldest")
-TO_EPOCH=$(echo $STATE | jq -r ".summary.messages.newest")
+TO_EPOCH=$(($FROM_EPOCH + 2000))
 
 echo "Walking from epoch ${FROM_EPOCH} to ${TO_EPOCH}"
 
@@ -35,5 +35,7 @@ lily job run --storage=CSV walk --from ${FROM_EPOCH} --to ${TO_EPOCH}
 lily job wait --id 1
 
 lily stop
+
+lily job list
 
 ls -lh /data
