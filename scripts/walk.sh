@@ -16,7 +16,7 @@ aria2c -x16 -s16 "${SNAPSHOT_URL}" -d /tmp
 
 lily init --config /lily/config.toml --repo ${REPO_PATH} --import-snapshot /tmp/*.car
 
-nohup lily daemon --repo=${REPO_PATH} --config /lily/config.toml &> out.log &
+nohup lily daemon --repo ${REPO_PATH} --config /lily/config.toml --bootstrap false &> out.log &
 
 lily wait-api
 
