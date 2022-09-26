@@ -10,25 +10,26 @@ REPO_PATH="${REPO_PATH:-"/var/lib/lily"}"
 
 echo "Initializing Lily repository with ${SNAPSHOT_URL}"
 
-export GOLOG_LOG_FMT=json
-
 aria2c -x16 -s16 "${SNAPSHOT_URL}" -d /tmp
 
-lily init --config /lily/config.toml --repo ${REPO_PATH} --import-snapshot /tmp/*.car
+export GOLOG_LOG_FMT=json
+# export LILY_BLOCKSTORE_CACHE_SIZE=10
+# export LILY_STATESTORE_CACHE_SIZE=10
 
-nohup lily daemon --repo ${REPO_PATH} --config /lily/config.toml --bootstrap false &> out.log &
+lily init --config /lily/config.toml --repo "${REPO_PATH}" --import-snapshot /tmp/*.car
+nohup lily daemon --repo "${REPO_PATH}" --config /lily/config.toml --bootstrap false &> out.log &
 
 lily wait-api
 
-car_file_name=$(ls -1 /tmp/*.car | xargs basename)
+car_file_name=$(find /tmp/*.car -maxdepth 1 -print0 | xargs -0 -n1 basename)
 TO_EPOCH=${car_file_name%%_*}
-FROM_EPOCH=$(($TO_EPOCH - 2000))
+FROM_EPOCH=$((TO_EPOCH - 2000))
 
 echo "Walking from epoch ${FROM_EPOCH} to ${TO_EPOCH}"
 
 sleep 10
 
-lily job run --storage=CSV walk --from ${FROM_EPOCH} --to ${TO_EPOCH}
+lily job run --storage=CSV walk --from "${FROM_EPOCH}" --to "${TO_EPOCH}"
 
 lily job wait --id 1
 
