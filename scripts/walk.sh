@@ -13,11 +13,11 @@ echo "Initializing Lily repository with ${SNAPSHOT_URL}"
 aria2c -x16 -s16 "${SNAPSHOT_URL}" -d /tmp
 
 export GOLOG_LOG_FMT=json
-# export LILY_BLOCKSTORE_CACHE_SIZE=10
-# export LILY_STATESTORE_CACHE_SIZE=10
+export LILY_BLOCKSTORE_CACHE_SIZE=6000000
+export LILY_STATESTORE_CACHE_SIZE=6000000
 
 lily init --config /lily/config.toml --repo "${REPO_PATH}" --import-snapshot /tmp/*.car
-nohup lily daemon --repo "${REPO_PATH}" --config /lily/config.toml --bootstrap false &> out.log &
+nohup lily daemon --repo="${REPO_PATH}" --config=/lily/config.toml --bootstrap=false &> out.log &
 
 lily wait-api
 
