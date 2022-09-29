@@ -7,6 +7,9 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 # Add required files
 COPY config.toml scripts /lily/
 
+# Create data folder
+RUN mkdir /data
+
 ENTRYPOINT [ "/bin/bash" ]
 
 CMD [ "/lily/walk.sh" ]

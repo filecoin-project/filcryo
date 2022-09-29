@@ -3,7 +3,7 @@
 # Usage: ./walk.sh [SNAPSHOT_URL]
 # Defaults to the latest snapshot available.
 
-set -eo pipefail
+set -eox pipefail
 
 SNAPSHOT_URL="${1:-"https://snapshots.mainnet.filops.net/minimal/latest"}"
 REPO_PATH="${REPO_PATH:-"/var/lib/lily"}"
@@ -13,8 +13,8 @@ echo "Initializing Lily repository with ${SNAPSHOT_URL}"
 aria2c -x16 -s16 "${SNAPSHOT_URL}" -d /tmp
 
 export GOLOG_LOG_FMT=json
-export LILY_BLOCKSTORE_CACHE_SIZE=6000000
-export LILY_STATESTORE_CACHE_SIZE=6000000
+# export LILY_BLOCKSTORE_CACHE_SIZE=6000000
+# export LILY_STATESTORE_CACHE_SIZE=6000000
 
 lily init --config /lily/config.toml --repo "${REPO_PATH}" --import-snapshot /tmp/*.car
 nohup lily daemon --repo="${REPO_PATH}" --config=/lily/config.toml --bootstrap=false &> out.log &
