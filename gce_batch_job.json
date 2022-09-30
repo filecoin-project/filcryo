@@ -5,11 +5,11 @@
                 "runnables": [
                     {
                         "container": {
-                            "imageUri": "davidgasquez/filet:v0.2.3",
+                            "imageUri": "davidgasquez/filet:v0.3.0",
                             "volumes": [
-                                "/mnt/share:/data"
+                                "/mnt/share:/gcs"
                             ],
-                            "options": "--tmpfs /ram -e REPO_PATH=/ram/.lily"
+                            "options": "--privileged --tmpfs /ram -e REPO_PATH=/ram/.lily"
                         }
                     },
                     {

@@ -2,6 +2,6 @@
     [Storage.File]
         [Storage.File.CSV]
             Format = "CSV"
-            Path = "/data"
+            Path = "/tmp/data"
             OmitHeader = false
             FilePattern = "{table}.csv"

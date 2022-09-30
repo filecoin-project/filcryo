@@ -8,8 +8,8 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 COPY config.toml scripts /lily/
 
 # Create data folder
-RUN mkdir /data
+RUN mkdir /tmp/data
 
+# Run script
 ENTRYPOINT [ "/bin/bash" ]
-
 CMD [ "/lily/walk.sh" ]
