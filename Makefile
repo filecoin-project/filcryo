@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := run
 
 VERSION=v0.3.0
-IMAGE=davidgasquez/filet
+IMAGE=europe-west1-docker.pkg.dev/protocol-labs-data/pl-data/filet
 
 build:
 	docker build -t $(IMAGE):$(VERSION) -t $(IMAGE):latest .
