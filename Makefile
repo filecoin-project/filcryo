@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := run
 
-VERSION=v0.3.0
+VERSION=v0.3.1
 IMAGE=davidgasquez/filet
 
 build:
