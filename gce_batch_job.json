@@ -5,7 +5,7 @@
                 "runnables": [
                     {
                         "container": {
-                            "imageUri": "davidgasquez/filet:v0.3.0",
+                            "imageUri": "europe-west1-docker.pkg.dev/protocol-labs-data/pl-data/filet:v0.3.3",
                             "volumes": [
                                 "/mnt/share:/gcs"
                             ],
