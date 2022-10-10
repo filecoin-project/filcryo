@@ -7,6 +7,7 @@ set -eox pipefail
 
 SNAPSHOT_URL="${1:-"https://snapshots.mainnet.filops.net/minimal/latest"}"
 REPO_PATH="${REPO_PATH:-"/var/lib/lily"}"
+WALK_EPOCHS="${WALK_EPOCHS:-"500"}"
 
 echo "Initializing Lily repository with ${SNAPSHOT_URL}"
 
@@ -21,7 +22,7 @@ lily wait-api
 
 CAR_FILE_NAME=$(find /tmp/*.car -maxdepth 1 -print0 | xargs -0 -n1 basename)
 TO_EPOCH=${CAR_FILE_NAME%%_*}
-FROM_EPOCH=$((TO_EPOCH - 2000))
+FROM_EPOCH=$((TO_EPOCH - WALK_EPOCHS))
 
 echo "Walking from epoch ${FROM_EPOCH} to ${TO_EPOCH}"
 
