@@ -5,7 +5,7 @@
                 "runnables": [
                     {
                         "container": {
-                            "imageUri": "europe-west1-docker.pkg.dev/protocol-labs-data/pl-data/filet:v0.3.3",
+                            "imageUri": "europe-west1-docker.pkg.dev/protocol-labs-data/pl-data/filet:v0.3.4",
                             "volumes": [
                                 "/mnt/share:/gcs"
                             ],
@@ -19,9 +19,9 @@
                     }
                 ],
                 "computeResource": {
-                    "cpuMilli": 55000,
-                    "memoryMib": 310000,
-                    "boot_disk_mib": 307200
+                    "cpuMilli": 48000,
+                    "memoryMib": 183105,
+                    "boot_disk_mib": 190735
                 },
                 "volumes": [
                     {
@@ -42,7 +42,7 @@
         "instances": [
             {
                 "policy": {
-                    "machineType": "n2-standard-64",
+                    "machineType": "n2-standard-48",
                     "provisioningModel": "SPOT"
                 }
             }

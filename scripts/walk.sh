@@ -7,7 +7,7 @@ set -eox pipefail
 
 SNAPSHOT_URL="${1:-"https://snapshots.mainnet.filops.net/minimal/latest"}"
 REPO_PATH="${REPO_PATH:-"/var/lib/lily"}"
-WALK_EPOCHS="${WALK_EPOCHS:-"500"}"
+WALK_EPOCHS="${WALK_EPOCHS:-"400"}"
 
 echo "Initializing Lily repository with ${SNAPSHOT_URL}"
 
