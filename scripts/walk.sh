@@ -30,11 +30,10 @@ sleep 10
 
 lily job run --storage=CSV walk --from "${FROM_EPOCH}" --to "${TO_EPOCH}"
 
-lily job wait --id 1
-
-lily stop
+lily job wait --id 1 && lily stop
 
 ls -lh /tmp/data
 
 mkdir -p /gcs/"$CAR_FILE_NAME"
-mv /tmp/data/*.csv /gcs/"$CAR_FILE_NAME/"
+mv /tmp/data/*.csv /gcs/"$CAR_FILE_NAME"/
+mv out.log /gcs/"$CAR_FILE_NAME"/
