@@ -5,11 +5,11 @@
                 "runnables": [
                     {
                         "container": {
-                            "imageUri": "europe-west1-docker.pkg.dev/protocol-labs-data/pl-data/filet:v0.3.4",
+                            "imageUri": "europe-west1-docker.pkg.dev/protocol-labs-data/pl-data/filet:v0.4.0",
                             "volumes": [
                                 "/mnt/share:/gcs"
                             ],
-                            "options": "--privileged --tmpfs /ram -e REPO_PATH=/ram/.lily"
+                            "options": "--privileged -e LILY_BLOCKSTORE_CACHE_SIZE=2000000 -e LILY_STATESTORE_CACHE_SIZE=800000"
                         }
                     },
                     {
@@ -20,8 +20,8 @@
                 ],
                 "computeResource": {
                     "cpuMilli": 48000,
-                    "memoryMib": 183105,
-                    "boot_disk_mib": 190735
+                    "memoryMib": 190000,
+                    "boot_disk_mib": 300000
                 },
                 "volumes": [
                     {
