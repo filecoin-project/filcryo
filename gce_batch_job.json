@@ -5,9 +5,14 @@
                 "runnables": [
                     {
                         "container": {
-                            "imageUri": "europe-west1-docker.pkg.dev/protocol-labs-data/pl-data/filet:v0.4.0",
+                            "imageUri": "europe-west1-docker.pkg.dev/protocol-labs-data/pl-data/filet:v0.5.0.backfill",
                             "volumes": [
                                 "/mnt/share:/gcs"
+                            ],
+                            "entrypoint": "/lily/export.sh",
+                            "commands": [
+                                "/gcs/snapshot_0_2882_1666948118.car.zst",
+                                "/gcs/backfill/"
                             ],
                             "options": "--privileged -e LILY_BLOCKSTORE_CACHE_SIZE=2000000 -e LILY_STATESTORE_CACHE_SIZE=800000"
                         }
@@ -19,9 +24,9 @@
                     }
                 ],
                 "computeResource": {
-                    "cpuMilli": 48000,
-                    "memoryMib": 190000,
-                    "boot_disk_mib": 300000
+                    "cpuMilli": 28000,
+                    "memoryMib": 90000,
+                    "boot_disk_mib": 150000
                 },
                 "volumes": [
                     {
@@ -42,7 +47,7 @@
         "instances": [
             {
                 "policy": {
-                    "machineType": "n2-standard-48",
+                    "machineType": "n2-standard-32",
                     "provisioningModel": "SPOT"
                 }
             }

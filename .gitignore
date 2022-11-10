@@ -133,4 +133,5 @@ dmypy.json
 
 # CAR files
 *.car
+*.car.zst
 *.car.aria2
