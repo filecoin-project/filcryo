@@ -13,5 +13,6 @@ The `filet` image available on Google Container Artifact Hub. You can run the `e
 You can run the following command to generate CSVs from an Filecoin Archival Snapshot:
 
 ```bash
-docker run -it -v $PWD:/tmp/data europe-west1-docker.pkg.dev/protocol-labs-data/pl-data/filet:latest -- /lily/export.sh archival_snapshot.car.zst .
+docker run -it -v $PWD:/tmp/data europe-west1-docker.pkg.dev/protocol-labs-data/pl-data/filet:latest -- \
+    /lily/export.sh archival_snapshot.car.zst .
 ```
