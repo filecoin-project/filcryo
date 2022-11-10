@@ -4,7 +4,7 @@ ENV SRC_PATH    /build
 ENV GO111MODULE on
 ENV GOPROXY     https://proxy.golang.org
 
-# install gcloud and build deps for lily and sentinel-archiver
+# Install build deps for lily and sentinel-archiver
 RUN apt-get update -y && \
     apt-get install git make ca-certificates jq hwloc libhwloc-dev mesa-opencl-icd ocl-icd-opencl-dev -y && \
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
@@ -20,7 +20,7 @@ RUN git clone https://github.com/filecoin-project/lily.git && \
 
 FROM buildpack-deps:buster-curl
 
-# Install aria2
+# Install aria2 and zstd
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends aria2 zstd
 
@@ -39,4 +39,4 @@ COPY config.toml scripts gce_batch_job.json /lily/
 # Create data folder
 WORKDIR /tmp/data
 
-ENTRYPOINT ["/bin/sh"]
+ENTRYPOINT ["/bin/bash"]

@@ -6,11 +6,11 @@ IMAGE=europe-west1-docker.pkg.dev/protocol-labs-data/pl-data/filet
 build:
 	docker build -t $(IMAGE):$(VERSION) -t $(IMAGE):latest .
 
-run: build
+run:
 	docker run -it -v ${PWD}/.lily:/var/lib/lily -v ${PWD}:/tmp/data $(IMAGE):$(VERSION)
 
 dev:
-	docker run -it --entrypoint /bin/bash -v ${PWD}/.lily:/var/lib/lily -v ${PWD}:/workspace $(IMAGE):$(VERSION)
+	docker run -it --entrypoint /bin/bash -v ${PWD}/.lily:/var/lib/lily -v ${PWD}:/tmp/data $(IMAGE):$(VERSION)
 
 push: build
 	docker push $(IMAGE):$(VERSION)
