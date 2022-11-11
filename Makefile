@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := run
 
-VERSION=v0.5.1
+VERSION=v0.5.2
 IMAGE=europe-west1-docker.pkg.dev/protocol-labs-data/pl-data/filet
 
 build:
@@ -20,5 +20,5 @@ clean:
 	sudo rm -rf .lily
 	rm -rf *.car *.aria2
 
-send:
+send: push
 	gcloud --billing-project protocol-labs-data beta batch jobs submit lily-job-gcs-backfill-$(shell date +%s) --config gce_batch_job.json --location europe-north1
