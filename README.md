@@ -1,6 +1,6 @@
 # :cook: Filet
 
-Filet makes it simple to get CSV data from Filecoin Archival Snapshots using [Lily](https://github.com/filecoin-project/lily) and [`sentinel-archiver`](https://github.com/filecoin-project/sentinel-archiver/).
+Filet (**Fil**ecoin **E**xtract **T**ransform) makes it simple to get CSV data from Filecoin Archival Snapshots using [Lily](https://github.com/filecoin-project/lily) and [`sentinel-archiver`](https://github.com/filecoin-project/sentinel-archiver/).
 
 ## :rocket: Usage
 
