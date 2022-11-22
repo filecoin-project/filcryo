@@ -12,7 +12,7 @@ RUN apt-get update -y && \
 
 WORKDIR $SRC_PATH
 
-RUN git clone https://github.com/filecoin-project/sentinel-archiver.git && \
+RUN git clone --branch kasteph/11 https://github.com/filecoin-project/sentinel-archiver.git && \
     cd sentinel-archiver && make build
 
 RUN git clone https://github.com/filecoin-project/lily.git && \
@@ -22,7 +22,7 @@ FROM buildpack-deps:buster-curl
 
 # Install aria2 and zstd
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -y install --no-install-recommends aria2 zstd
+    && apt-get -y install --no-install-recommends aria2 zstd jq
 
 ENV SRC_PATH /build
 

@@ -3,5 +3,5 @@
         [Storage.File.CSV]
             Format = "CSV"
             Path = "/tmp/data"
-            OmitHeader = false
+            OmitHeader = true
             FilePattern = "{jobname}-{table}.csv"
