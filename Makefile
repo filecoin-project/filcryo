@@ -1,10 +1,10 @@
 .DEFAULT_GOAL := run
 
-VERSION=v0.5.16
+VERSION=v0.5.19
 IMAGE=europe-west1-docker.pkg.dev/protocol-labs-data/pl-data/filet
 
 build:
-	docker build -t $(IMAGE):$(VERSION) -t $(IMAGE):latest .
+	docker build --no-cache -t $(IMAGE):$(VERSION) -t $(IMAGE):latest .
 
 run:
 	docker run -it -v ${PWD}/.lily:/var/lib/lily -v ${PWD}:/tmp/data $(IMAGE):$(VERSION)
