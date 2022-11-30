@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := run
 
-VERSION=v0.5.19
+VERSION=v0.5.21
 IMAGE=europe-west1-docker.pkg.dev/protocol-labs-data/pl-data/filet
 
 build:
