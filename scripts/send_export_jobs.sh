@@ -25,6 +25,6 @@ for SNAPSHOT in ${SNAPSHOT_LIST}; do
         # Pad the epoch with 0s to 10 digits
         PADDED_SNAPSHOT_EPOCH_FROM=$(printf "%010d" "$SNAPSHOT_EPOCH_FROM")
         PADDED_SNAPSHOT_EPOCH_TO=$(printf "%010d" "$SNAPSHOT_EPOCH_TO")
-        envsubst < gce_batch_job.json | gcloud --billing-project protocol-labs-data beta batch jobs submit lily-job-gcs-backfill-snapshot-"$PADDED_SNAPSHOT_EPOCH_FROM"-"$PADDED_SNAPSHOT_EPOCH_TO"-"$(date +%s)" --location europe-north1 --config=-
+        envsubst < gce_batch_job.json | gcloud --billing-project protocol-labs-data beta batch jobs submit lily-backfill-snapshot-"$PADDED_SNAPSHOT_EPOCH_FROM"-"$PADDED_SNAPSHOT_EPOCH_TO"-"$(date +%s)" --location europe-north1 --config=-
     fi
 done
