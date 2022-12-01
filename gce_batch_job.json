@@ -5,7 +5,7 @@
                 "runnables": [
                     {
                         "container": {
-                            "imageUri": "europe-west1-docker.pkg.dev/protocol-labs-data/pl-data/filet:v0.5.21",
+                            "imageUri": "europe-west1-docker.pkg.dev/protocol-labs-data/pl-data/filet:v0.6.0",
                             "volumes": [
                                 "/mnt/share:/gcs",
                                 "/mnt/snapshots/historical-exports:/snapshots"
