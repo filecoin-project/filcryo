@@ -12,10 +12,10 @@ RUN apt-get update -y && \
 
 WORKDIR $SRC_PATH
 
-RUN git clone --branch kasteph/11 https://github.com/filecoin-project/sentinel-archiver.git && \
+RUN git clone https://github.com/filecoin-project/sentinel-archiver.git && \
     cd sentinel-archiver && make build
 
-RUN git clone --branch v0.12.0 https://github.com/filecoin-project/lily.git && \
+RUN git clone --branch v0.13.0 https://github.com/filecoin-project/lily.git && \
     cd lily && CGO_ENABLED=1 make clean all
 
 FROM buildpack-deps:buster-curl
