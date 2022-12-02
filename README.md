@@ -24,3 +24,17 @@ The `filet` image can deployed into different environments. We're using Google C
 ```
 
 For more details on the scheduled jobs configuration, you can check the [`gce_batch_job.json`](./gce_batch_job.json) file.
+
+## :alarm_clock: Scheduling Jobs
+
+You can use the [`send_export_jobs.sh`](scripts/send_export_jobs.sh) script to schedule jobs on Google Cloud Batch. The script takes a file with a list of snapshots as input.
+
+```bash
+./scripts/send_export_jobs.sh SNAPSHOT_LIST_FILE [--dry-run]
+```
+
+The `SNAPSHOT_LIST_FILE` file should contain a list of snapshots, one per line. The snapshots should be available in the `fil-mainnet-archival-snapshots` Google Cloud Storage bucket.
+
+```
+gsutil ls gs://fil-mainnet-archival-snapshots/historical-exports/ | sort --version-sort > all_snapshots.txt
+```
