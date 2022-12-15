@@ -30,3 +30,9 @@ The `SNAPSHOT_LIST_FILE` file should contain a list of snapshots, one per line. 
 ```
 gsutil ls gs://fil-mainnet-archival-snapshots/historical-exports/ | sort --version-sort > all_snapshots.txt
 ```
+
+To get the batches you can use the following command to filter by snapshot height:
+
+```bash
+grep -E '^[2226480-2232002]$'
+```
