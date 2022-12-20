@@ -1,38 +1,28 @@
-# :cook: Filet
+# :ice_cube: Filcryo
 
-Filet (**Fil**ecoin **E**xtract **T**ransform) makes it simple to get CSV data from Filecoin Archival Snapshots using [Lily](https://github.com/filecoin-project/lily) and [`sentinel-archiver`](https://github.com/filecoin-project/sentinel-archiver/).
+Filcryo makes it simple to freeze chunks of the Filecoin chain with all nutritional properties (archival grade quality). They can then be cooked with [Filet](https://github.com/filecoin-project/filcryo).
 
 ## :rocket: Usage
 
-The `filet` image available on Google Container Artifact Hub. Alternatively, you can build it locally with `make build`.
+The `filcryo` image available on Google Container Artifact Hub. Alternatively, you can build it locally with `make build`.
 
-The following command will generate CSVs from an Filecoin Archival Snapshot:
+The following command will make a new snapshot based on an existing snapshot:
 
 ```bash
 docker run -it \
     -v $PWD:/tmp/data \
-    europe-west1-docker.pkg.dev/protocol-labs-data/pl-data/filet:latest -- \
-    /lily/export.sh archival_snapshot.car.zst .
+    europe-west1-docker.pkg.dev/protocol-labs-data/pl-data/filcryo:latest -- \
+    <start_epoch>
 ```
+
+`<start_epoch>` must correspond to the start epoch of an existing snapshot in `gcloud storage ls gs://fil-mainnet-archival-snapshots/historical-exports/`. The new snapshot will be compressed and uploaded to this destination as well.
 
 ## :alarm_clock: Scheduling Jobs
 
-You can use the [`send_export_jobs.sh`](scripts/send_export_jobs.sh) script to schedule jobs on Google Cloud Batch. The script takes a file with a list of snapshots as input.
+You can use the [`send_export_jobs.sh`](scripts/send_export_jobs.sh) script to schedule a job on Google Cloud Batch that runs the export.
 
 ```bash
-./scripts/send_export_jobs.sh SNAPSHOT_LIST_FILE [--dry-run]
+./scripts/send_export_jobs.sh <start_epoch> [--dry-run]
 ```
 
 For more details on the scheduled jobs configuration, you can check the [`gce_batch_job.json`](./gce_batch_job.json) file.
-
-The `SNAPSHOT_LIST_FILE` file should contain a list of snapshots, one per line. The snapshots should be available in the `fil-mainnet-archival-snapshots` Google Cloud Storage bucket.
-
-```
-gsutil ls gs://fil-mainnet-archival-snapshots/historical-exports/ | sort --version-sort > all_snapshots.txt
-```
-
-To get the batches you can use the following command to filter by snapshot height:
-
-```bash
-grep -E '^[2226480-2232002]$'
-```
