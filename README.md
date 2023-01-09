@@ -30,9 +30,12 @@ order to be efficient, we expect `/root` to be persistently mounted on the
 host machine, so that we do not have to re-initialize lotus from scratch on
 every container-restart:
 
-```
+```sh
 # an example and nothing else!
-docker run -v /root:/root filcryo
+
+docker build -t filcryo -f Dockerfile .
+docker run --name filcryo -v /root:/root -d --restart=always filcryo:latest
+# lotus will be initialized from the latest snapshot in /root/.lotus if not present already
 ```
 
 ## Internals
