@@ -1,28 +1,42 @@
 # :ice_cube: Filcryo
 
-Filcryo makes it simple to freeze chunks of the Filecoin chain with all nutritional properties (archival grade quality). They can then be cooked with [Filet](https://github.com/filecoin-project/filcryo).
+Filcryo is used to freeze chunks of the Filecoin chain with all nutritional
+properties (archival grade quality). They can then be cooked with
+[Filet](https://github.com/filecoin-project/filcryo).
+
+This project first and foremost aim is to create archival-grade snapshots as
+used by the Sentinel/Data Engineering Team at Protocol Labs for further
+processing. It is meant to "just work" for this and be as simple and easy to
+follow as possible. Generalization or re-usability are secondary concerns as
+of now.
 
 ## :rocket: Usage
 
-The `filcryo` image available on Google Container Artifact Hub. Alternatively, you can build it locally with `make build`.
+This repository contains some bash scripts and a Dockerfile to make
+archival-grade snapshots.
 
-The following command will make a new snapshot based on an existing snapshot:
+The `scripts` folder contains a library file (`filcryo.sh`) with useful
+functions when performing archival operations. These are used the bash scripts
+provided there. The purpose is to make it easy to perform one-off tasks by
+hand when needed by running some of the scripts or using them to write new
+simple scripts. Usually scripts will take an "epoch": this is the epoch of the
+snapshot that we want to download/upload etc., or the "epoch" on which we must
+start making snapshots. All these epochs must be multiples of 2880 (24h in
+Filecoin).
 
-```bash
-docker run -it \
-    -v $PWD:/tmp/data \
-    europe-west1-docker.pkg.dev/protocol-labs-data/pl-data/filcryo:latest -- \
-    <start_epoch>
+The Docker container uses `scripts/entrypoint.sh` by default. This entrypoint
+runs the lotus daemon in the background and performs snapshots as it goes. In
+order to be efficient, we expect `/root` to be persistently mounted on the
+host machine, so that we do not have to re-initialize lotus from scratch on
+every container-restart:
+
+```
+# an example and nothing else!
+docker run -v /root:/root filcryo
 ```
 
-`<start_epoch>` must correspond to the start epoch of an existing snapshot in `gcloud storage ls gs://fil-mainnet-archival-snapshots/historical-exports/`. The new snapshot will be compressed and uploaded to this destination as well.
+## Internals
 
-## :alarm_clock: Scheduling Jobs
-
-You can use the [`send_export_jobs.sh`](scripts/send_export_jobs.sh) script to schedule a job on Google Cloud Batch that runs the export.
-
-```bash
-./scripts/send_export_jobs.sh <start_epoch> [--dry-run]
-```
-
-For more details on the scheduled jobs configuration, you can check the [`gce_batch_job.json`](./gce_batch_job.json) file.
+* We use a custom Lotus branch that speeds up chain exports (FIXME)
+* Scripts upload and download from a specific gcloud storage (`gs://fil-mainnet-archival-snapshots/historical-exports/`)
+* The project is highly WIP as of today.

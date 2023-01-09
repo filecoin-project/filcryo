@@ -40,9 +40,10 @@ RUN ln -s /gcloud/bin/gsutil /usr/local/bin/gsutil
 
 
 # Add required files
-COPY scripts gce_batch_job.json /data/
+COPY scripts /scripts
 
-# Create data folder
-WORKDIR /data
+# Work from root's home, which we will recommend persisting on the host.
+WORKDIR /root
+VOLUME /root
 
-ENTRYPOINT ["/bin/bash"]
+ENTRYPOINT ["/scripts/entrypoint.sh"]

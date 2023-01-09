@@ -4,4 +4,4 @@ set -euxo pipefail
 
 . filcryo.sh
 
-download_snapshot "$1"
+get_last_epoch
