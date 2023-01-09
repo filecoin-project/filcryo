@@ -1,7 +1,0 @@
-[Storage]
-    [Storage.File]
-        [Storage.File.CSV]
-            Format = "CSV"
-            Path = "/tmp/data"
-            OmitHeader = true
-            FilePattern = "{jobname}-{table}.csv"
