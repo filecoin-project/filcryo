@@ -125,7 +125,7 @@ function wait_for_epoch {
     while true; do
 	local current_height
 	current_height=$(lotus chain list --count 1 | cut -d ':' -f 1) || { sleep 1; continue; }
-	echo "current height: ${current_height}"
+	echo "$(date): current height: ${current_height}"
 
 	if [[ "${current_height}" -ge "${END}" ]]; then
 	    break
