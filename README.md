@@ -1,5 +1,9 @@
 # :ice_cube: Filcryo
 
+```sh
+docker pull filecoin/filcryo
+```
+
 Filcryo is used to freeze chunks of the Filecoin chain with all nutritional
 properties (archival grade quality). They can then be cooked with
 [Filet](https://github.com/filecoin-project/filcryo).
@@ -33,10 +37,11 @@ every container-restart:
 ```sh
 # an example and nothing else!
 
-docker build -t filcryo -f Dockerfile .
-docker run --name filcryo -v /root:/root -d --restart=always filcryo:latest
+docker run --name filcryo -v /root:/root -d --restart=always filecoin/filcryo:latest
 # lotus will be initialized from the latest snapshot in /root/.lotus if not present already
 ```
+
+The container is automatically built and `filecoin/filcryo:latest` always point to the latest commit on `main`.
 
 ## Internals
 
