@@ -9,6 +9,11 @@ function export_range {
     (( "END=${START}+2880" ))
     echo "$(date): Exporting snapshot from ${START} until ${END} (+10 extra)"
     (( "END+=10" ))
+
+    # Remove any leftover snapshots for the same epoch before we start exporting it.
+    # Leftovers may happen if the process OOMs.
+    rm -f snapshot_"${START}"_*.car
+    
     lotus chain export-range --internal --messages --receipts --stateroots --workers 50 --head "@${END}" --tail "@${START}" --write-buffer=5000000 export.car
     echo "$(date): Finished exporting snapshot from ${START} until ${END}"
     mkdir -p finished_snapshots
