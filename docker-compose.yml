@@ -23,5 +23,5 @@ services:
       - "-config.file=https://raw.githubusercontent.com/filecoin-project/filcryo/main/metrics/grafana-agent.yaml"
       - "-config.expand-env"
     environment:
-      - PROMETHEUS_USERNAME: "${PROMETHEUS_USERNAME}"
-      - PROMETHEUS_PASSWORD: "${PROMETHEUS_PASSWORD}"
+      PROMETHEUS_USERNAME: "${PROMETHEUS_USERNAME}"
+      PROMETHEUS_PASSWORD: "${PROMETHEUS_PASSWORD}"
