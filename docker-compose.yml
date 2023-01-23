@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  filcryo:
+    image: "filecoin/filcryo:latest"
+    network_mode: host
+    restart: always
+    volumes:
+      - /root:/root
+      
+  grafana-agent:
+    image: "grafana/agent:v0.30.2"
+    network_mode: host
+    restart: always
+    pid: "host"
+    cap_add:
+      - SYS_TIME
+    volumes:
+      - /:/host/root:ro,rslave
+      - /sys:/host/root/sys:ro,rslave
+      - /proc:/host/proc:ro,rslave
+    command:
+      - "-enable-features=remote-configs"
+      - "-config.file=https://raw.githubusercontent.com/filecoin-project/filcryo/main/metrics/grafana-agent.yaml"
+      - "-config.expand-env"
+    environment:
+      - PROMETHEUS_USERNAME: "${PROMETHEUS_USERNAME}"
+      - PROMETHEUS_PASSWORD: "${PROMETHEUS_PASSWORD}"

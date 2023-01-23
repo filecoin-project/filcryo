@@ -29,10 +29,11 @@ start making snapshots. All these epochs must be multiples of 2880 (24h in
 Filecoin).
 
 The Docker container uses `scripts/entrypoint.sh` by default. This entrypoint
-runs the lotus daemon in the background and performs snapshots as it goes. In
-order to be efficient, we expect `/root` to be persistently mounted on the
-host machine, so that we do not have to re-initialize lotus from scratch on
-every container-restart:
+runs the lotus daemon in the background and performs snapshots as it goes, as
+well as writing some metrics to disk for optional export. In order to be
+efficient, we expect `/root` to be persistently mounted on the host machine,
+so that we do not have to re-initialize lotus from scratch on every
+container-restart:
 
 ```sh
 # an example and nothing else!

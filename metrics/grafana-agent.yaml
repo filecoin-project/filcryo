@@ -1,0 +1,17 @@
+integrations:
+  prometheus_remote_write:
+    - url: https://prometheus-us-central1.grafana.net/api/prom/push
+      basic_auth:
+        username: ${PROMETHEUS_USERNAME}
+        password: ${PROMETHEUS_PASSWORD}
+  agent:
+    enabled: true
+    scrape_interval: 1m
+  node_exporter:
+    enabled: true
+    rootfs_path: /host/root
+    sysfs_path: /host/sys
+    procfs_path: /host/proc
+    enable_collectors:
+      - textfile
+    textfile_directory: /host/root/metrics

@@ -66,7 +66,7 @@ function get_last_epoch {
     return 0
 }
 
-# get last snapshot epoch returns the epoch of the last available snapshot so it can be used with
+# get_last_snapshot_epoch returns the epoch of the last available snapshot so it can be used with
 # download_snapshot
 function get_last_snapshot_epoch {
     local last_epoch
@@ -74,7 +74,16 @@ function get_last_snapshot_epoch {
     echo "${last_epoch}"
     return 0
 }
-    
+
+# get_last_snapshot_size returns the size of the last available snapshot.
+function get_last_snapshot_size {
+    local last_epoch
+    last_epoch=$(get_last_snapshot_epoch)
+    size=$(gcloud storage ls -l "gs://fil-mainnet-archival-snapshots/historical-exports/*_${last_epoch}_*" | head -n1 | cut -d ' ' -f 1)
+    echo "${size}"
+    return 0
+}
+
 # import_snapshot imports an snapshot corresponding to the given epoch into lotus with --halt-after-import.
 function import_snapshot {
     local START=$1
@@ -119,7 +128,8 @@ function upload_snapshot {
 }
 
 # wait_for_epoch waits for lotus to be synced up to the given epoch + 2880 +
-# 905 epochs: it waits until we can make a 24h snapshot that starts on the given epoch, with the end epoch having reached finality.
+# 905 epochs: otherwise said, it waits until we can make a 24h snapshot that
+# starts on the given epoch, with the end epoch having reached finality.
 function wait_for_epoch {
     local START="$1"
     local END
@@ -135,7 +145,7 @@ function wait_for_epoch {
 	if [[ "${current_height}" -ge "${END}" ]]; then
 	    break
 	fi
-	sleep 10
+	sleep 120
     done
     echo "$(date): Lotus reached ${END}"
 }
