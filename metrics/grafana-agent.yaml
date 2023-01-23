@@ -1,3 +1,7 @@
+metrics:
+  global:
+    scrape_interval: 15s
+
 integrations:
   prometheus_remote_write:
     - url: https://prometheus-us-central1.grafana.net/api/prom/push
@@ -6,7 +10,6 @@ integrations:
         password: ${PROMETHEUS_PASSWORD}
   agent:
     enabled: true
-    scrape_interval: 1m
   node_exporter:
     enabled: true
     rootfs_path: /host/root
