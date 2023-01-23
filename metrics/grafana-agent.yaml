@@ -14,4 +14,4 @@ integrations:
     procfs_path: /host/proc
     enable_collectors:
       - textfile
-    textfile_directory: /host/root/metrics
+    textfile_directory: /host/root/root/metrics
