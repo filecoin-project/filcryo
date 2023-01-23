@@ -16,7 +16,7 @@ services:
       - SYS_TIME
     volumes:
       - /:/host/root:ro,rslave
-      - /sys:/host/root/sys:ro,rslave
+      - /sys:/host/sys:ro,rslave
       - /proc:/host/proc:ro,rslave
     command:
       - "-enable-features=remote-configs"
