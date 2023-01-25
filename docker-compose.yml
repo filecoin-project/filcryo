@@ -1,14 +1,18 @@
 version: "3.9"
 services:
   filcryo:
-    image: "filecoin/filcryo:latest"
+    labels:
+      project: filcryo
+    image: "filecoin/filcryo:${FILCRYO_VERSION}"
     network_mode: host
     restart: always
     volumes:
       - /root:/root
       
   grafana-agent:
-    image: "grafana/agent:v0.30.2"
+    labels:
+      project: filcryo
+    image: "grafana/agent:${GRAFANA_AGENT_VERSION}"
     network_mode: host
     restart: always
     pid: "host"
@@ -18,10 +22,16 @@ services:
       - /:/host/root:ro,rslave
       - /sys:/host/sys:ro,rslave
       - /proc:/host/proc:ro,rslave
+      - /var/run:/host/var/run:ro,rslave
+      - /var/grafana-agent:/var/grafana-agent
     command:
       - "-enable-features=remote-configs"
-      - "-config.file=https://raw.githubusercontent.com/filecoin-project/filcryo/main/metrics/grafana-agent.yaml"
+      - "-config.file=https://raw.githubusercontent.com/filecoin-project/filcryo/main/grafana-agent/config.yaml"
       - "-config.expand-env"
     environment:
+      PROMETHEUS_URL: "https://prometheus-us-central1.grafana.net/api/prom/push"
       PROMETHEUS_USERNAME: "${PROMETHEUS_USERNAME}"
       PROMETHEUS_PASSWORD: "${PROMETHEUS_PASSWORD}"
+      LOKI_URL: "https://logs-prod-us-central1.grafana.net/loki/api/v1/push"
+      LOKI_USERNAME: "${LOKI_USERNAME}"
+      LOKI_PASSWORD: "${LOKI_PASSWORD}"

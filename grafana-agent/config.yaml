@@ -1,0 +1,45 @@
+metrics:
+  global:
+    scrape_interval: 15s
+  wal_directory: "/var/grafana-agent/wal"
+
+integrations:
+  prometheus_remote_write:
+    - url: ${PROMETHEUS_URL}
+      basic_auth:
+        username: ${PROMETHEUS_USERNAME}
+        password: ${PROMETHEUS_PASSWORD}
+  agent:
+    enabled: true
+  node_exporter:
+    enabled: true
+    rootfs_path: /host/root
+    sysfs_path: /host/sys
+    procfs_path: /host/proc
+    enable_collectors:
+      - textfile
+    textfile_directory: /host/root/root/metrics
+
+logs:
+  configs:
+    - name: docker logs
+      positions:
+        filename: "/var/grafana-agent/log-positions.yaml"
+      clients:
+        - url: "${LOKI_URL}"
+          basic_auth:
+            username: "${LOKI_USERNAME}"
+            password: "${LOKI_PASSWORD}"
+      scrape_configs:
+        - job_name: docker-filcryo
+          docker_sd_configs:
+            - host: unix:///host/var/run/docker.sock
+              refresh_interval: 5s
+          relabel_configs:
+            - source_labels: ['__meta_docker_container_name']
+              regex: '/(.*)'
+              target_label: 'container'
+            - source_labels: ['__meta_docker_container_label_app']
+              target_label: 'app'
+          pipeline_stages:
+            - docker: {}
