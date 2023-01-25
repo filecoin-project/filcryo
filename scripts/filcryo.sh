@@ -7,7 +7,7 @@ function export_range {
     local START="$1"
     local END
     (( "END=${START}+2880" ))
-    echo "$(date): Exporting snapshot from ${START} until ${END} (+10 extra)"
+    echo "Exporting snapshot from ${START} until ${END} (+10 extra)"
     (( "END+=10" ))
 
     # Remove any leftover snapshots for the same epoch before we start exporting it.
@@ -15,7 +15,7 @@ function export_range {
     rm -f snapshot_"${START}"_*.car
     
     lotus chain export-range --internal --messages --receipts --stateroots --workers 50 --head "@${END}" --tail "@${START}" --write-buffer=5000000 export.car
-    echo "$(date): Finished exporting snapshot from ${START} until ${END}"
+    echo "Finished exporting snapshot from ${START} until ${END}"
     mkdir -p finished_snapshots
     mv snapshot_"${START}"_*.car finished_snapshots/
     # FIXME: null rounds
@@ -27,9 +27,9 @@ function compress_snapshot {
     local START=$1
 
     pushd finished_snapshots || return 1
-    echo "$(date): Compressing snapshot for ${START}"
+    echo "Compressing snapshot for ${START}"
     zstd --fast --rm --no-progress -T0 snapshot_"${START}"_*.car && \
-	echo "$(date): Finished compressing snapshot for ${START}"
+	echo "Finished compressing snapshot for ${START}"
     popd || return 1
     return 0
 }
@@ -88,17 +88,17 @@ function get_last_snapshot_size {
 function import_snapshot {
     local START=$1
     
-    echo "$(date): Importing snapshot"
+    echo "Importing snapshot"
     lotus daemon --import-snapshot snapshot_"${START}"_*.car --halt-after-import
     return 0
 }
 
 # start_lotus launches lotus daemon with the given daemon arguments and waits until it is running.
 function start_lotus {
-    echo "$(date): Launching Lotus daemon: ${1:-}"
+    echo "Launching Lotus daemon: ${1:-}"
     # shellcheck disable=SC2086
     nohup lotus daemon ${1:-} &>>lotus.log & # run in background!
-    echo "$(date): Waiting for lotus to start"
+    echo "Waiting for lotus to start"
     while ! lotus sync status; do
 	sleep 10
     done
@@ -108,7 +108,7 @@ function start_lotus {
 
 # stop_lotus stops the lotus daemon gracefully
 function stop_lotus {
-    echo "$(date): Shutting down lotus"
+    echo "Shutting down lotus"
     lotus daemon stop
     sleep 20
     return 0
@@ -119,9 +119,9 @@ function upload_snapshot {
     local START=$1
     
     pushd finished_snapshots || return 1
-    echo "$(date): Uploading snapshot for ${START}"
+    echo "Uploading snapshot for ${START}"
     gsutil cp snapshot_"${START}"_*.car.zst "gs://fil-mainnet-archival-snapshots/historical-exports/"
-    echo "$(date): Finished uploading snapshot for ${START}"
+    echo "Finished uploading snapshot for ${START}"
     rm snapshot_"${START}"_*.car.zst
     popd || return 1
     return 0
@@ -135,17 +135,17 @@ function wait_for_epoch {
     local END
     (( "END=${START}+2880+900+5" ))
 
-    echo "$(date): Waiting for Lotus to sync until ${END}"
+    echo "Waiting for Lotus to sync until ${END}"
 
     while true; do
 	local current_height
 	current_height=$(lotus chain list --count 1 | cut -d ':' -f 1) || { sleep 1; continue; }
-	echo "$(date): current height: ${current_height}"
+	# echo "Current Lotus height: ${current_height}"
 
 	if [[ "${current_height}" -ge "${END}" ]]; then
 	    break
 	fi
-	sleep 120
+	sleep 30
     done
-    echo "$(date): Lotus reached ${END}"
+    echo "Lotus reached ${END}"
 }
