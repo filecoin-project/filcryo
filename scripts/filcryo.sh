@@ -13,9 +13,37 @@ function export_range {
     # Remove any leftover snapshots for the same epoch before we start exporting it.
     # Leftovers may happen if the process OOMs.
     rm -f snapshot_"${START}"_*.car
-    
+
     lotus chain export-range --internal --messages --receipts --stateroots --workers 50 --head "@${END}" --tail "@${START}" --write-buffer=5000000 export.car
     echo "Finished exporting snapshot from ${START} until ${END}"
+    # Deal with null rounds happening just when the snapshot starts.
+    # These will result in the START date being one or several epochs before (consecutive null rounds)
+    local i=0
+    local actual_start="${START}"
+    local snapshot_name
+    while [[ "$i" -lt 10 ]]; do
+	(( "actual_start=${START}-${i}" ))
+	snapshot_name=$(compgen -G snapshot_"${actual_start}"_*.car || true)
+	if [[ -z "${snapshot_name}" ]]; then
+	    (( "i++" ))
+	else # found it
+	    if [[ "$i" -eq 0 ]]; then
+		break # normal case, no need to rename
+	    fi
+	    local fixed_name
+	    # shellcheck disable=SC2001
+	    fixed_name=$(echo "${snapshot_name}" | sed "s/snapshot_${actual_start}_\(.*\)/snapshot_${START}_\1/g")
+	    echo "WARNING: Snapshot has unexpected name (probably due to null epochs)."
+	    echo "WARNING: ${snapshot_name} will be renamed to ${fixed_name}"
+	    mv "${snapshot_name}" "${fixed_name}"
+	    break
+	fi
+    done
+    if [[ "$i" -ge 10 ]]; then
+	echo "ERROR: expected snapshot file not found"
+	return 1
+    fi
+
     mkdir -p finished_snapshots
     mv snapshot_"${START}"_*.car finished_snapshots/
     # FIXME: null rounds
@@ -40,7 +68,7 @@ function download_snapshot {
 
     # Verify the snapshot exists. Exits with error otherwise.
     snapshot_url=$(gcloud storage ls "gs://fil-mainnet-archival-snapshots/historical-exports/snapshot_${START}_*_*.car.zst") || return 1
-    
+
     snapshot_name=$(basename "${snapshot_url}")
     mkdir -p downloaded_snapshots
     pushd downloaded_snapshots || return 1
@@ -87,7 +115,7 @@ function get_last_snapshot_size {
 # import_snapshot imports an snapshot corresponding to the given epoch into lotus with --halt-after-import.
 function import_snapshot {
     local START=$1
-    
+
     echo "Importing snapshot"
     lotus daemon --import-snapshot snapshot_"${START}"_*.car --halt-after-import
     return 0
@@ -117,7 +145,7 @@ function stop_lotus {
 # upload_snapshot uploads the snapshot for the given epoch to the gcloud storage bucket.
 function upload_snapshot {
     local START=$1
-    
+
     pushd finished_snapshots || return 1
     echo "Uploading snapshot for ${START}"
     gsutil cp snapshot_"${START}"_*.car.zst "gs://fil-mainnet-archival-snapshots/historical-exports/"
