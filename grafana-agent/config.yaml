@@ -40,6 +40,6 @@ logs:
               regex: '/(.*)'
               target_label: 'container'
             - source_labels: ['__meta_docker_container_label_project']
-              target_label: 'app'
+              target_label: 'project'
           pipeline_stages:
             - docker: {}
