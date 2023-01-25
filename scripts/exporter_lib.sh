@@ -1,8 +1,8 @@
 #! /bin/bash
 
 # Author: Fabrizio Catalucci
-# License: unknown.
-# Source: https://github.com/fabricat/bash_prometheus_metrics
+# License: MIT.
+# Source: https://github.com/fabricat/bash_prometheus_metrics/tree/5669fb4887d4c5152bef6531e52fb0d7d3e223eb
 
 # You need 2 global variables to use this lib
 #   - metrics_prefix (string, optional, default: don't use prefix)
