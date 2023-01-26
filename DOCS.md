@@ -23,11 +23,13 @@ Running in production consists of:
 * Running the filcryo docker container
 * Collecting metrics and logs
 
-In order to collect metrics and logs we use Grafana Agent. For simplicity, running both containers is done using [`docker-compose.yml`](docker-compose.yml). The main thing done is that it sets the volume mounts correctly so that the Grafana agent read the `metrics.prom` file generated in the Filcryo container.
+Lotus requires a significant amount of resources to run (RAM), particularly when exporting. For this reason we expect to run this in a full VM. In fact GCP does not have good facilities to run containers (or a docker-compose stack) with lots of RAM.
+
+In order to collect metrics and logs we use Grafana Agent. For simplicity, running both containers is done using [`docker-compose.yml`](docker-compose.yml). The main thing done is that it sets the volume mounts correctly so that persistent storage exists as needed and the Grafana agent read the `metrics.prom` file generated in the Filcryo container.
 
 Grafana Agent is configured with [`config.yaml`](grafana-agent/config.yaml). The configuration makes it:
-  * Launch node_exporter (grabs all host machine metrics)
-  * Collect all docker containers logs
+  * Launch node_exporter (grabs all host machine metrics and filcryo metrics). Prometheus `job` value for all metrics collected is `filcryo`.
+  * Collect all docker containers logs: logs are tagged with `project:filcryo`. Additional tags include: `container` (filcryo/grafana-agent) or `app` (lotus).
   * Upload everything to Grafana Cloud (urls hardcoded)
 
 **Note that Grafana Agent picks up the configuration directly from Github main-branch (see `-config.file` flag in `docker-compose.yml`)**. This avoids having to pack up or provide the configuration on the side (and then mount it when running the container).
