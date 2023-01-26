@@ -34,6 +34,9 @@ Grafana Agent is configured with [`config.yaml`](grafana-agent/config.yaml). The
 
 A `Filcryo` Grafana dashboard exists and tracks all the relevant stuff.
 
+![image](https://user-images.githubusercontent.com/1027022/214831509-eca73672-79ad-42f3-b30c-71ebad00148a.png)
+
+
 ## Deployment
 
 Deployments are performed via Github Actions. TODO.
