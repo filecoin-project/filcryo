@@ -24,7 +24,7 @@ echo "There was an update: building and deploying"
 
 docker build -t filcryo:latest -f Dockerfile .
 
-docker compose down || true
+docker compose rm || true
 docker compose up --detach
 
 echo "Docker compose Filcryo stack was recreated"
