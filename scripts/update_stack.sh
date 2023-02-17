@@ -22,9 +22,9 @@ git pull origin main
 
 echo "There was an update: building and deploying"
 
-docker build --no-cache -t filcryo:latest -f Dockerfile
+docker build --no-cache -t filcryo:latest -f Dockerfile .
 
 docker compose down || true
-docker compose up --quiet-pull --pull=always --detach
+docker compose up --detach
 
 echo "Docker compose Filcryo stack was recreated"
