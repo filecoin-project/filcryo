@@ -22,7 +22,7 @@ git pull origin main
 
 echo "There was an update: building and deploying"
 
-docker build --no-cache -t filcryo:latest -f Dockerfile .
+docker build -t filcryo:latest -f Dockerfile .
 
 docker compose down || true
 docker compose up --detach
