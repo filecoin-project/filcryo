@@ -24,7 +24,7 @@ echo "There was an update: building and deploying"
 
 docker build -t filcryo:latest -f Dockerfile .
 
-docker compose rm || true
+docker compose rm --stop || true
 sleep 5
 docker compose up --detach
 
