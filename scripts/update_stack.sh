@@ -24,8 +24,7 @@ echo "There was an update: building and deploying"
 
 docker build -t filcryo:latest -f Dockerfile .
 
-docker compose rm --stop || true
-sleep 5
+# This will recreate containers that changed.
 docker compose up --detach
 
 echo "Docker compose Filcryo stack was recreated"
