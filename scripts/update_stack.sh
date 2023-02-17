@@ -18,13 +18,13 @@ fi
 echo "Pulling repository and deploying the Filcryo stack"
 
 # Pull the latest changes from the remote repository
-git pull origin/main
+git pull origin main
 
 echo "There was an update: building and deploying"
 
 docker build --no-cache -t filcryo:latest -f Dockerfile
 
-docker compose down
-docker compose up --quite-pull --pull=always --detach
+docker compose down || true
+docker compose up --quiet-pull --pull=always --detach
 
 echo "Docker compose Filcryo stack was recreated"
