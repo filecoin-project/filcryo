@@ -72,7 +72,7 @@ function download_snapshot {
     snapshot_name=$(basename "${snapshot_url}")
     mkdir -p downloaded_snapshots
     pushd downloaded_snapshots || return 1
-    gsutil cp "${snapshot_url}" .
+    gcloud storage cp "${snapshot_url}" .
     zstd --rm -d "${snapshot_name}"
     popd || return 1
 
@@ -148,7 +148,7 @@ function upload_snapshot {
 
     pushd finished_snapshots || return 1
     echo "Uploading snapshot for ${START}"
-    gsutil cp snapshot_"${START}"_*.car.zst "gs://fil-mainnet-archival-snapshots/historical-exports/"
+    gcloud storage cp snapshot_"${START}"_*.car.zst "gs://fil-mainnet-archival-snapshots/historical-exports/"
     echo "Finished uploading snapshot for ${START}"
     rm snapshot_"${START}"_*.car.zst
     popd || return 1
@@ -168,7 +168,7 @@ function wait_for_epoch {
     while true; do
 	local current_height
 	current_height=$(lotus chain list --count 1 | cut -d ':' -f 1) || { sleep 1; continue; }
-	if [[ $((( "${current_height} % 20" ))) -eq 0 ]]; then
+	if [[ $(( "${current_height} % 20" )) -eq 0 ]]; then
 	    echo "Current Lotus height: ${current_height}"
 	fi
 

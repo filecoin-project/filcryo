@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ex
 # Pull any updates to the filcryo repository.
 pushd /opt/filcryo || exit 0
 
@@ -25,6 +25,7 @@ echo "There was an update: building and deploying"
 docker build -t filcryo:latest -f Dockerfile .
 
 docker compose rm || true
+sleep 5
 docker compose up --detach
 
 echo "Docker compose Filcryo stack was recreated"
