@@ -12,7 +12,7 @@ RUN apt-get update -y && \
 
 WORKDIR $SRC_PATH
 
-RUN git clone --single-branch --depth=2 --branch hsanjuan/chain-export-range-rebased https://github.com/hsanjuan/lotus.git && \
+RUN git clone --single-branch --depth=2 --branch hsanjuan/chain-export-range-rebased-v1.19.0 https://github.com/hsanjuan/lotus.git && \
 cd lotus && \
 CGO_ENABLED=1 make lotus
 

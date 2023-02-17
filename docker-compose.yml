@@ -3,7 +3,7 @@ services:
   filcryo:
     labels:
       project: filcryo
-    image: "filecoin/filcryo:${FILCRYO_VERSION}"
+    image: "filcryo:latest"
     network_mode: host
     restart: always
     volumes:
@@ -12,7 +12,7 @@ services:
   grafana-agent:
     labels:
       project: filcryo
-    image: "grafana/agent:${GRAFANA_AGENT_VERSION}"
+    image: "grafana/agent:v0.30.2"
     network_mode: host
     restart: always
     pid: "host"
@@ -30,8 +30,8 @@ services:
       - "-config.expand-env"
     environment:
       PROMETHEUS_URL: "https://prometheus-us-central1.grafana.net/api/prom/push"
-      PROMETHEUS_USERNAME: "${PROMETHEUS_USERNAME}"
-      PROMETHEUS_PASSWORD: "${PROMETHEUS_PASSWORD}"
+      PROMETHEUS_USERNAME: "${FILCRYO_PROMETHEUS_USERNAME}"
+      PROMETHEUS_PASSWORD: "${FILCRYO_PROMETHEUS_PASSWORD}"
       LOKI_URL: "https://logs-prod-us-central1.grafana.net/loki/api/v1/push"
-      LOKI_USERNAME: "${LOKI_USERNAME}"
-      LOKI_PASSWORD: "${LOKI_PASSWORD}"
+      LOKI_USERNAME: "${FILCRYO_LOKI_USERNAME}"
+      LOKI_PASSWORD: "${FILCRYO_LOKI_PASSWORD}"
