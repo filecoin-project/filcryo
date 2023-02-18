@@ -22,6 +22,12 @@ resource "google_storage_bucket_iam_member" "historical_exports" {
   member = "serviceAccount:${google_service_account.filcryo.email}"
 }
 
+resource "google_project_iam_member" "list_buckets" {
+  project = "protocol-labs-data"
+  role    = "roles/storage.buckets.get"
+  member  = "serviceAccount:${google_service_account.filcryo.email}"
+}
+
 locals {
   secrets = {
     secret1 = "FILCRYO_PROMETHEUS_USERNAME",
