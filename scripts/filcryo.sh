@@ -45,8 +45,9 @@ function export_range {
     fi
 
     mkdir -p finished_snapshots
+    # Remove any failed-upload snapshots
+    rm -f finished_snapshots/snapshot_"${START}"_*.car
     mv snapshot_"${START}"_*.car finished_snapshots/
-    # FIXME: null rounds
     return 0
 }
 
@@ -148,6 +149,7 @@ function upload_snapshot {
 
     pushd finished_snapshots || return 1
     echo "Uploading snapshot for ${START}"
+    gcloud config set storage/parallel_composite_upload_enabled False
     gcloud storage cp snapshot_"${START}"_*.car.zst "gs://fil-mainnet-archival-snapshots/historical-exports/"
     echo "Finished uploading snapshot for ${START}"
     rm snapshot_"${START}"_*.car.zst

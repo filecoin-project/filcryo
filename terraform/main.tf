@@ -16,15 +16,47 @@ resource "google_service_account" "filcryo" {
   display_name = "Filcryo"
 }
 
-resource "google_storage_bucket_iam_member" "historical_exports" {
+resource "google_project_iam_custom_role" "filcryo_bucket_role" {
+  role_id     = "filcryo_bucket_role"
+  title       = "Filcryo Bucket permissions"
+  description = "Bucket-specific permissions for Filcryo"
+  permissions = [
+    "orgpolicy.policy.get",
+    "resourcemanager.projects.get",
+    "storage.multipartUploads.abort",
+    "storage.multipartUploads.create",
+    "storage.multipartUploads.list",
+    "storage.multipartUploads.listParts",
+    "storage.objects.create",
+    "storage.objects.delete",
+    "storage.objects.get",
+    "storage.objects.getIamPolicy",
+    "storage.objects.setIamPolicy",
+    "storage.objects.list",
+    "storage.objects.update",
+    "storage.buckets.list",
+    "storage.buckets.get",
+  ]
+}
+
+resource "google_project_iam_custom_role" "filcryo_project_role" {
+  role_id     = "filcryo_project_role"
+  title       = "Filcryo Project permissions"
+  description = "Project-wide permissions for Filcryo"
+  permissions = [
+    "storage.buckets.list",
+  ]
+}
+
+resource "google_storage_bucket_iam_member" "filcryo" {
   bucket = "fil-mainnet-archival-snapshots"
-  role   = "roles/storage.objectAdmin"
+  role   = google_project_iam_custom_role.filcryo_bucket_role.name
   member = "serviceAccount:${google_service_account.filcryo.email}"
 }
 
-resource "google_project_iam_member" "list_buckets" {
+resource "google_project_iam_member" "filcryo" {
   project = "protocol-labs-data"
-  role    = "roles/storage.buckets.get"
+  role    = google_project_iam_custom_role.filcryo_project_role.name
   member  = "serviceAccount:${google_service_account.filcryo.email}"
 }
 
