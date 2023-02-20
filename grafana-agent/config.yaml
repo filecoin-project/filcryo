@@ -45,13 +45,11 @@ logs:
             - docker: {}
         - job_name: filcryo-lotus
           static_configs:
-            - targets: [ "localhost"]
-              labels:
+            - labels:
                 __path__: /host/root/root/logs/lotus.log
                 project: filcryo
                 app: lotus
-            - targets: ["localhost"]
-              labels:
+            - labels:
                 __path__: /host/root/root/logs/update_stack.log
                 project: filcryo
                 app: update_stack.sh
