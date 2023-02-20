@@ -83,7 +83,7 @@ resource "google_secret_manager_secret_iam_binding" "secret_access" {
 
 resource "google_compute_instance" "filcryo" {
   name         = "filcryo"
-  machine_type = "n2d-custom-16-92160"
+  machine_type = "n2d-custom-16-65536"
   zone         = "europe-west1-b"
   tags         = ["filcryo"]
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ex
+set -e
 # Pull any updates to the filcryo repository.
 pushd /opt/filcryo || exit 0
 
