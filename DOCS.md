@@ -74,7 +74,7 @@ System and application logs are pushed to Grafana/Loki (tagged with `project=fil
 
 The instance can be accessed via SSH. SSH-access is auto-magically handled by Google Cloud Compute (users configured there get they're usernames/keys automatically on the instance).
 
-## Issue and alerts
+## Issues and alerts
 
 The operation of Filcryo should be most maintenance free, but deployments and restarts are better done when no ongoing export or initialization is happening. There will be some common issues:
 
