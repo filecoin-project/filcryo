@@ -47,4 +47,4 @@ mv /opt/filcryo/.env-temp /opt/filcryo/.env
 
 # Write cronjobs to the crontab file.
 echo "Installing cronjob to check updates every minute"
-echo "* * * * * root /opt/filcryo/scripts/update_stack.sh >> /opt/filcryo/update_stack_log 2>&1" > /etc/cron.d/update_stack
+echo "* * * * * root /opt/filcryo/scripts/update_stack.sh >> /root/logs/update_stack.log 2>&1" > /etc/cron.d/update_stack
