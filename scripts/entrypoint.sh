@@ -17,6 +17,7 @@ pushd /root
 
 if [[ ! -d .lotus ]]; then # initialize from latest snapshot
     last_epoch=$(get_last_snapshot_epoch)
+    rm -rf downloaded_snapshots # clean leftovers
     download_snapshot "${last_epoch}"
     lotus daemon --bootstrap=false --halt-after-import --import-snapshot downloaded_snapshots/*_"${last_epoch}"_*.car
 fi

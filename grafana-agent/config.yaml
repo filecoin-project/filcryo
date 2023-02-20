@@ -57,6 +57,7 @@ logs:
                 app: update_stack.sh
         - job_name: filcryo-journal
           journal:
+            path: /host/var/log/journal
             labels:
               project: filcryo
               app: journal
