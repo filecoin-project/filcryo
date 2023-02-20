@@ -47,12 +47,12 @@ logs:
           static_configs:
             - targets: [ "localhost"]
               labels:
-                __path__: /root/logs/lotus.log
+                __path__: /host/root/logs/lotus.log
                 project: filcryo
                 app: lotus
             - targets: ["localhost"]
               labels:
-                __path__: /root/logs/update_stack.log
+                __path__: /host/root/logs/update_stack.log
                 project: filcryo
                 app: update_stack.sh
         - job_name: filcryo-journal
