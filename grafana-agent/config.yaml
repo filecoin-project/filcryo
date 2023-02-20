@@ -31,15 +31,32 @@ logs:
             username: "${LOKI_USERNAME}"
             password: "${LOKI_PASSWORD}"
       scrape_configs:
-        - job_name: docker-filcryo
+        - job_name: filcryo-docker
           docker_sd_configs:
             - host: unix:///host/var/run/docker.sock
               refresh_interval: 5s
           relabel_configs:
             - source_labels: ['__meta_docker_container_name']
               regex: '/(.*)'
-              target_label: 'container'
+              target_label: 'app'
             - source_labels: ['__meta_docker_container_label_project']
               target_label: 'project'
           pipeline_stages:
             - docker: {}
+        - job_name: filcryo-lotus
+          static_configs:
+            labels:
+              __path__: /root/logs/lotus.log
+              project: filcryo
+              app: lotus
+        - job_name: filcryo-update_stack
+          static_configs:
+            labels:
+              __path__: /root/logs/update_stack.log
+              project: filcryo
+              app: update_stack.sh
+        - job_name: filcryo-journal
+          journal:
+            labels:
+              project: filcryo
+              app: journal

@@ -126,7 +126,8 @@ function import_snapshot {
 function start_lotus {
     echo "Launching Lotus daemon: ${1:-}"
     # shellcheck disable=SC2086
-    nohup lotus daemon ${1:-} &>>lotus.log & # run in background!
+    mkdir -p logs/lotus.log
+    nohup lotus daemon ${1:-} &>>logs/lotus.log & # run in background!
     echo "Waiting for lotus to start"
     while ! lotus sync status; do
 	sleep 10

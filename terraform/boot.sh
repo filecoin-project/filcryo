@@ -45,6 +45,8 @@ fetch_secret "FILCRYO_LOKI_USERNAME"
 fetch_secret "FILCRYO_LOKI_PASSWORD"
 mv /opt/filcryo/.env-temp /opt/filcryo/.env
 
+mkdir -p /root/logs
+
 # Write cronjobs to the crontab file.
 echo "Installing cronjob to check updates every minute"
 echo "* * * * * root /opt/filcryo/scripts/update_stack.sh >> /root/logs/update_stack.log 2>&1" > /etc/cron.d/update_stack

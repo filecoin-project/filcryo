@@ -11,8 +11,8 @@ git fetch
 if git diff HEAD origin/main --quiet && \
 	[ "$(docker compose -f /opt/filcryo/docker-compose.yml ps -q)" != "" ];
 then
-  echo "No changes to the repository and the Filcryo stack is running. Exiting."
-  exit 0
+    # echo "No changes to the repository and the Filcryo stack is running. Exiting."
+    exit 0
 fi
 
 echo "Pulling repository and deploying the Filcryo stack"
