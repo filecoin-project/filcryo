@@ -9,7 +9,7 @@ Filcryo is mostly a Lotus node bundled with some bash scripts into a Docker cont
   * Wait until Lotus head catches up.
   * Wait until the time it can export the next snapshot (2880 epochs + 900 finality-epochs + 15).
   * Export, compress, upload to bucket
-  * Repeat.
+  * Repeat (any errors will retrigger this cycle too).
 * While the wait-export loop is ongoing, the export some promethus metrics into files (`/root/metrics/metrics.prom`): current lotus height, latest snapshot epoch etc.
 
 The bash scripts and functions used are part of [`filcryo.sh`](scripts/filcryo.sh). A container can potentially be started with a custom entrypoint and the functions re-used for manual archival tasks (running parallel snapshots etc).
@@ -39,7 +39,7 @@ A `Filcryo` Grafana dashboard exists and tracks all the relevant stuff.
 
 ## Deployment
 
-Infrastructure deployment is performed via Terraform (`terraform/` folder):
+Infrastructure deployment is performed manually via Terraform (`terraform/` folder):
 
 * The Terraform version is configured via asdf (see [.tool_versions](.tool_versions)).
 * The state is stored in a remote Google Cloud storage bucket.
@@ -65,16 +65,20 @@ The `update_stack.sh` script, in turn:
 That means: **Filcryo is always running with the latest version of "main" and will automatically upgrade on push to "main"**. Caveats:
 
 * The filcryo container is always rebuilt and restarted even when no changes affected the container
-* The grafana-agent container is not restarted unless the version changed
-* A change in the `update_stack.sh` script is only effective on the second commit after it (because it is already running as it pulls the commit on which it chances).
+* The grafana-agent container is not restarted unless the version changed (changes to grafana-agent config require manual restart)
+* A change in the `update_stack.sh` script is only effective on the second commit after it (because it is already running as it pulls the commit on which it changes itself).
 
-System and application logs are pushed to Grafana/Loki (tagged with `project=filcryo`). On the host, `update_stack.sh` and Lotus logs can be found at `/root/logs`. Mostly everything happens at `/root`, where the working scripts downloaded and ongoing snapshots are placed by the Filcryo container.
+System and application logs are pushed to Grafana/Loki (tagged with `project=filcryo`). The `update_stack.sh` and Lotus logs can be found at `/root/logs` on the host, additionally. Mostly everything happens at `/root`, where the working scripts downloaded and ongoing snapshots are placed by the Filcryo container.
+
+## Access
+
+The instance can be accessed via SSH. SSH-access is auto-magically handled by Google Cloud Compute (users configured there get they're usernames/keys automatically on the instance).
 
 ## Issue and alerts
 
 The operation of Filcryo should be most maintenance free, but deployments and restarts are better done when no ongoing export or initialization is happening. There will be some common issues:
 
-* Disk-full: the Lotus repository filled the disk: the best solution be to run `terraform destroy` and `terraform apply` and start on a fresh machine.
+* Disk-full: the Lotus repository filled the disk: the best solution be to run `terraform destroy` and `terraform apply` and start on a fresh machine. This will need a few hours to sync and start doing snapshots again.
 * Last snapshot happened long ago: something must have broken the process. Must check if lotus is running and what are the error logs when starting the export: are we waiting for Lotus to reach a certain height? Does the export give an error? Is Lotus alive or has it OOM'ed ? In general it should be fine to just `docker restart filcryo-filcryo-1` or `cd /opt/filcryo; docker compose down; docker compose up -d`.
 
 Some alerts are configured in the Grafana dashboard and notify relevant slack channels when snapshots stopped to happen. Alerts should be tended to, but are not meant to trigger on-call events.
