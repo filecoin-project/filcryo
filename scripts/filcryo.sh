@@ -70,7 +70,7 @@ function download_snapshot {
     local START=$1
 
     # Verify the snapshot exists. Exits with error otherwise.
-    snapshot_url=$(gcloud storage ls "gs://fil-mainnet-archival-snapshots/historical-exports/snapshot_${START}_*_*.car.zst") || return 1
+    snapshot_url=$(gcloud --billing-project="${BILLING_PROJECT}" storage ls "gs://fil-mainnet-archival-snapshots/historical-exports/snapshot_${START}_*_*.car.zst") || return 1
 
     snapshot_name=$(basename "${snapshot_url}")
     mkdir -p downloaded_snapshots
@@ -91,7 +91,7 @@ function get_last_epoch {
     # -> 2298240
 
     local last_epoch
-    last_epoch=$(gcloud storage ls gs://fil-mainnet-archival-snapshots/historical-exports/ | xargs -n1 basename | cut -d'_' -f 2 | sort -n | tail -n1)
+    last_epoch=$(gcloud --billing-project="${BILLING_PROJECT}" storage ls gs://fil-mainnet-archival-snapshots/historical-exports/ | xargs -n1 basename | cut -d'_' -f 2 | sort -n | tail -n1)
     (( "last_epoch=${last_epoch}+2880" ))
     echo "${last_epoch}"
     return 0
@@ -101,7 +101,7 @@ function get_last_epoch {
 # download_snapshot
 function get_last_snapshot_epoch {
     local last_epoch
-    last_epoch=$(gcloud storage ls gs://fil-mainnet-archival-snapshots/historical-exports/ | xargs -n1 basename | cut -d'_' -f 2 | sort -n | tail -n1)
+    last_epoch=$(gcloud --billing-project="${BILLING_PROJECT}" storage ls gs://fil-mainnet-archival-snapshots/historical-exports/ | xargs -n1 basename | cut -d'_' -f 2 | sort -n | tail -n1)
     echo "${last_epoch}"
     return 0
 }
@@ -110,7 +110,7 @@ function get_last_snapshot_epoch {
 function get_last_snapshot_size {
     local last_epoch
     last_epoch=$(get_last_snapshot_epoch)
-    size=$(gcloud storage ls -l "gs://fil-mainnet-archival-snapshots/historical-exports/*_${last_epoch}_*" | head -n1 | cut -d ' ' -f 1)
+    size=$(gcloud --billing-project="${BILLING_PROJECT}" storage ls -l "gs://fil-mainnet-archival-snapshots/historical-exports/*_${last_epoch}_*" | head -n1 | cut -d ' ' -f 1)
     echo "${size}"
     return 0
 }
