@@ -91,6 +91,7 @@ function get_last_epoch {
     # -> 2298240
 
     local last_epoch
+    # FIXME: I think this can fail silently
     last_epoch=$(gcloud --billing-project="${BILLING_PROJECT}" storage ls gs://fil-mainnet-archival-snapshots/historical-exports/ | xargs -n1 basename | cut -d'_' -f 2 | sort -n | tail -n1)
     (( "last_epoch=${last_epoch}+2880" ))
     echo "${last_epoch}"
