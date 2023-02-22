@@ -45,6 +45,7 @@ resource "google_project_iam_custom_role" "filcryo_project_role" {
   description = "Project-wide permissions for Filcryo"
   permissions = [
     "storage.buckets.list",
+    "serviceusage.services.use",
   ]
 }
 
@@ -82,10 +83,11 @@ resource "google_secret_manager_secret_iam_binding" "secret_access" {
 }
 
 resource "google_compute_instance" "filcryo" {
-  name         = "filcryo"
-  machine_type = "n2d-custom-16-65536"
-  zone         = "europe-west1-b"
-  tags         = ["filcryo"]
+  name                      = "filcryo"
+  machine_type              = "n2d-standard-16"
+  zone                      = "europe-west1-b"
+  tags                      = ["filcryo"]
+  allow_stopping_for_update = false
 
   service_account {
     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
