@@ -2,6 +2,8 @@
 
 set -uo pipefail
 
+BILLING_PROJECT="protocol-labs-data"
+
 # export_range instructs lotus to do a chain export from the given height until 2890 epochs later.
 function export_range {
     local START="$1"
@@ -73,7 +75,7 @@ function download_snapshot {
     snapshot_name=$(basename "${snapshot_url}")
     mkdir -p downloaded_snapshots
     pushd downloaded_snapshots || return 1
-    gcloud storage cp "${snapshot_url}" .
+    gcloud --billing-project="${BILLING_PROJECT}" storage cp "${snapshot_url}" .
     zstd --rm -d "${snapshot_name}"
     popd || return 1
 
@@ -151,7 +153,7 @@ function upload_snapshot {
     pushd finished_snapshots || return 1
     echo "Uploading snapshot for ${START}"
     gcloud config set storage/parallel_composite_upload_enabled False
-    gcloud storage cp snapshot_"${START}"_*.car.zst "gs://fil-mainnet-archival-snapshots/historical-exports/"
+    gcloud --billing-project="${BILLING_PROJECT}" storage cp snapshot_"${START}"_*.car.zst "gs://fil-mainnet-archival-snapshots/historical-exports/"
     echo "Finished uploading snapshot for ${START}"
     rm snapshot_"${START}"_*.car.zst
     popd || return 1
