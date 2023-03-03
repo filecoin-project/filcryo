@@ -14,10 +14,12 @@ function export_range {
 
     # Remove any leftover snapshots for the same epoch before we start exporting it.
     # Leftovers may happen if the process OOMs.
-    rm -f snapshot_"${START}"_*.car
+    rm -f .lotus/snapshot_"${START}"_*.car
 
     lotus chain export-range --internal --messages --receipts --stateroots --workers 50 --head "@${END}" --tail "@${START}" --write-buffer=5000000 export.car
     echo "Finished exporting snapshot from ${START} until ${END}"
+    pushd /root/.lotus || return 1
+    
     # Deal with null rounds happening just when the snapshot starts.
     # These will result in the START date being one or several epochs before (consecutive null rounds)
     local i=0
@@ -45,11 +47,13 @@ function export_range {
 	echo "ERROR: expected snapshot file not found"
 	return 1
     fi
+    
+    popd || return 1
 
     mkdir -p finished_snapshots
     # Remove any failed-upload snapshots
     rm -f finished_snapshots/snapshot_"${START}"_*.car
-    mv snapshot_"${START}"_*.car finished_snapshots/
+    mv /root/.lotus/snapshot_"${START}"_*.car finished_snapshots/
     return 0
 }
 
