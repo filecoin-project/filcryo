@@ -67,10 +67,12 @@ function metrics {
 # Collect metrics
 metrics &
 
-if [ "${FILCRYO_ONLY_SYNC}" = "true" ]; then
+ONLY_SYNC="${FILCRYO_ONLY_SYNC:-false}"
+
+if [ "${ONLY_SYNC}" = "true" ]; then
     while true; do
-	sleep 600
 	echo "Filcryo is just syncing and not snapshotting"
+	sleep 600
     done
 fi
 
