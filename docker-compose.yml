@@ -8,6 +8,8 @@ services:
     restart: always
     volumes:
       - /root:/root
+    environment:
+      FILCRYO_ONLY_SYNC: false
       
   grafana-agent:
     labels:
