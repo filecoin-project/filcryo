@@ -67,6 +67,14 @@ function metrics {
 # Collect metrics
 metrics &
 
+if [ "${FILCRYO_ONLY_SYNC}" = "true" ]; then
+    while true; do
+	sleep 600
+	echo "Filcryo is just syncing and not snapshotting"
+    done
+fi
+
+
 # While(true): make snapshots
 while true; do
     size=$(get_last_snapshot_size)
