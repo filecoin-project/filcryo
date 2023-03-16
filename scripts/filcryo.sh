@@ -134,6 +134,8 @@ function start_lotus {
     echo "Launching Lotus daemon: ${1:-}"
     # shellcheck disable=SC2086
     mkdir -p logs
+    # ETHRPC is needed for events to be recorded
+    export LOTUS_FEVM_ENABLEETHRPC=true
     nohup lotus daemon ${1:-} &>>logs/lotus.log & # run in background!
     echo "Waiting for lotus to start"
     while ! lotus sync status; do
