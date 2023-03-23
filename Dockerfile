@@ -14,7 +14,8 @@ WORKDIR $SRC_PATH
 
 RUN git clone --single-branch --depth=2 --branch filcryo-v1.20.0-branch https://github.com/hsanjuan/lotus.git && \
 cd lotus && \
-CGO_ENABLED=1 make lotus
+CGO_ENABLED=1 make lotus && \
+CGO_ENABLED=1 make lotus-shed
 
 WORKDIR /gcloud
 RUN curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-412.0.0-linux-x86_64.tar.gz && tar -xf google-cloud-cli-412.0.0-linux-x86_64.tar.gz
@@ -29,6 +30,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 ENV SRC_PATH /build
 
 COPY --from=builder $SRC_PATH/lotus/lotus /usr/local/bin/lotus
+COPY --from=builder $SRC_PATH/lotus/lotus-shed /usr/local/bin/lotus-shed
 COPY --from=builder /usr/lib/x86_64-linux-gnu/libOpenCL.so* /lib/
 COPY --from=builder /usr/lib/x86_64-linux-gnu/libhwloc.so* /lib/
 COPY --from=builder /usr/lib/x86_64-linux-gnu/libnuma.so* /lib/
