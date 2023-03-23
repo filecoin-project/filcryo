@@ -112,13 +112,28 @@ function get_last_snapshot_epoch {
 }
 
 # get_last_snapshot_size returns the size of the last available snapshot.
-function get_last_snapshot_size {
+function get_last_uploaded_snapshot_size {
     local last_epoch
     last_epoch=$(get_last_snapshot_epoch)
     size=$(gcloud --billing-project="${BILLING_PROJECT}" storage ls -l "gs://fil-mainnet-archival-snapshots/historical-exports/*_${last_epoch}_*" | head -n1 | cut -d ' ' -f 1)
     echo "${size}"
     return 0
 }
+
+# get_exported_snapshot_size returns the size of an exported snapshot.
+function get_exported_snapshot_size {
+    local START=$1
+    stat --format '%s' finished_snapshots/snapshot_"${START}"_*.car
+}
+
+# get_stateroot_size returns the size of the stateroot for the given epoch
+# FIXME: unsure what happens on null epochs, possibly breaks.
+function get_stateroot_size {
+    local START=$1
+    ts=$(lotus chain list --height "${START}" --count 1 --format '<tipset>')
+    lotus-shed stateroot stat --tipset "${ts}" | head -n1 | grep -o '[[:digit:]]*' 
+}
+
 
 # import_snapshot imports an snapshot corresponding to the given epoch into lotus with --halt-after-import.
 function import_snapshot {

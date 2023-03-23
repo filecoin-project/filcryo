@@ -37,8 +37,8 @@ function metrics {
 	height=$(lotus chain list --count 1 | cut -d ':' -f 1)
 	exporter_add_metric "height" "counter" "Lotus current epoch" "${height}"
 
-	if [[ -f latest_snapshot_size ]]; then
-	    exporter_add_metric "latest_snapshot_size" "counter" "Size of the latest snapshot" "$(cat latest_snapshot_size)"
+	if [[ -f last_uploaded_snapshot_size ]]; then
+	    exporter_add_metric "last_uploaded_snapshot_size" "counter" "Size of the latest uploaded snapshot (compressed)" "$(cat last_uploaded_snapshot_size)"
 	fi
 
 	if [[ -f latest_snapshot_epoch ]]; then
@@ -47,6 +47,14 @@ function metrics {
 
 	if [[ -f export_duration ]]; then
 	    exporter_add_metric "export_duration" "counter" "Duration of the export step" "$(cat export_duration)"
+	fi
+
+	if [[ -f exported_snapshot_size ]]; then
+	    exporter_add_metric "exported_snapshot_size" "counter" "Size of the exported snapshot" "$(cat exported_snapshot_size)"
+	fi
+
+	if [[ -f stateroot_size ]]; then
+	    exporter_add_metric "stateroot_size" "counter" "Size of a single stateroot" "$(cat stateroot_size)"
 	fi
 
 	if [[ -f compress_duration ]]; then
@@ -79,10 +87,9 @@ fi
 
 # While(true): make snapshots
 while true; do
-    size=$(get_last_snapshot_size)
-    echo "${size}" > latest_snapshot_size
-    mv latest_snapshot_size metrics/
-
+    size=$(get_last_uploaded_snapshot_size)
+    echo "${size}" > last_uploaded_snapshot_size
+    mv last_uploaded_snapshot_size metrics/
 
     start=$(get_last_epoch)
     echo "${start}" > metrics/latest_snapshot_epoch
@@ -95,6 +102,12 @@ while true; do
     # shellcheck disable=SC2154
     echo "${export_duration}" > export_duration
     mv export_duration metrics/
+
+    get_exported_snapshot_size "${start}" > exported_snapshot_size
+    mv exported_snapshot_size metrics/
+
+    get_stateroot_size "${start}" > stateroot_size
+    mv stateroot_size metrics/
 
     compress_start_time=$(date '+%s')
     compress_snapshot "${start}"
