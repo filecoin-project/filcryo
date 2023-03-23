@@ -106,8 +106,8 @@ while true; do
     get_exported_snapshot_size "${start}" > exported_snapshot_size
     mv exported_snapshot_size metrics/
 
-    get_stateroot_size "${start}" > stateroot_size
-    mv stateroot_size metrics/
+    # get_stateroot_size "${start}" > stateroot_size
+    # mv stateroot_size metrics/
 
     compress_start_time=$(date '+%s')
     compress_snapshot "${start}"
