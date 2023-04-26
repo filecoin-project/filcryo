@@ -1,4 +1,4 @@
-FROM golang:1.18-buster AS builder
+FROM golang:1.19.7-buster AS builder
 
 ENV SRC_PATH    /build
 ENV GO111MODULE on
@@ -12,7 +12,7 @@ RUN apt-get update -y && \
 
 WORKDIR $SRC_PATH
 
-RUN git clone --single-branch --depth=2 --branch filcryo-v1.20.0-branch https://github.com/hsanjuan/lotus.git && \
+RUN git clone --single-branch --depth=2 --branch filcryo-v1.23.0-branch https://github.com/hsanjuan/lotus.git && \
 cd lotus && \
 CGO_ENABLED=1 make lotus && \
 CGO_ENABLED=1 make lotus-shed
