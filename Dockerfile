@@ -12,7 +12,7 @@ RUN apt-get update -y && \
 
 WORKDIR $SRC_PATH
 
-RUN git clone --single-branch --depth=2 --branch filcryo-v1.23.0-branch https://github.com/hsanjuan/lotus.git && \
+RUN git clone --single-branch --depth=2 --branch v1.23.3 https://github.com/filecoin-project/lotus.git && \
 cd lotus && \
 CGO_ENABLED=1 make lotus && \
 CGO_ENABLED=1 make lotus-shed

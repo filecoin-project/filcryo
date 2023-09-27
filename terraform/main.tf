@@ -101,7 +101,7 @@ resource "google_compute_instance" "filcryo" {
   boot_disk {
     initialize_params {
       image = "debian-cloud/debian-11"
-      size  = "10240"
+      size  = "2048"
       type  = "pd-ssd"
     }
   }
